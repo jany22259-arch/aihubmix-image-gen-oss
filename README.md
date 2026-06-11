@@ -1,118 +1,191 @@
 # aihubmix-image-gen-oss
 
-An open-source WorkBuddy skill for generating images through the Aihubmix image generation API.
+> 在 WorkBuddy 里一句话生成图片——不用切工具、不用另开网页、不用拖文件。
 
-## Why This Exists
+Generate images inside WorkBuddy with a single sentence. No tool switching, no external tabs, no drag-and-drop.
 
-AI coding assistants like WorkBuddy can already generate text, code, and analysis—but most cannot generate images. This skill bridges that gap: it gives any WorkBuddy agent the ability to generate production-quality images directly in the conversation flow, without leaving the tool or opening external services.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Platform: WorkBuddy](https://img.shields.io/badge/Platform-WorkBuddy-6c5ce7)](https://workbuddy.ai)
+[![Skills Standard](https://img.shields.io/badge/Skills-Agent%20Skills%20Standard-00b894)](https://agentskills.io)
 
-## What Problem It Solves
+---
 
-**Before:** When users needed images during a WorkBuddy session, they had to:
-1. Craft a prompt manually
-2. Open a separate image generation service
-3. Download the result
-4. Drag it back into the conversation
+## Quick Start · 快速开始
 
-**Now:** A single sentence triggers the entire pipeline. The agent generates the image, downloads it locally, and delivers it inline—all within the same chat.
+### 安装 · Install
 
-## Use Cases
+在 WorkBuddy 里说一句话就能安装：
 
-| Scenario | Example Prompt |
+```
+帮我安装这个 skill：https://github.com/jany22259-arch/aihubmix-image-gen-oss
+```
+
+或从 [Releases](https://github.com/jany22259-arch/aihubmix-image-gen-oss/releases) 下载 `aihubmix-image-gen-oss.skill`，手动导入 WorkBuddy。
+
+### 配置 · Configure
+
+设置环境变量（只做一次）：
+
+**Windows PowerShell**
+
+```powershell
+[Environment]::SetEnvironmentVariable("AIHUBMIX_API_KEY", "你的API密钥", "User")
+```
+
+**macOS / Linux**
+
+```bash
+echo 'export AIHUBMIX_API_KEY="你的API密钥"' >> ~/.bashrc && source ~/.bashrc
+```
+
+重启 WorkBuddy。
+
+### 使用 · Use
+
+在 WorkBuddy 里直接说：
+
+```
+用 aihubmix-image-gen-oss 生成一张蓝色科技风海报
+```
+
+```
+Generate a cyberpunk city poster with neon blue lighting, model gemini-3-pro-image
+```
+
+一句话，图片就生成了，保存在当前工程目录的 `outputs/images/` 下。
+
+---
+
+## Why This Exists · 为什么做这个
+
+AI 助手可以写代码、做分析、写文档——但大多数不能生成图片。
+
+每次需要配图，你得：
+1. 想好 prompt
+2. 打开另一个生图服务
+3. 下载图片
+4. 拖回 WorkBuddy
+
+这个 skill 把这四步变成**一句话**。
+
+灵感来自日常工作流：写报告要配图、做 PPT 要封面、做电商素材要主图——每次切工具都很烦。跑通了一个月，确实省事，决定开源。
+
+---
+
+## What It Does · 能干什么
+
+| 能力 | 说明 |
 |---|---|
-| E-commerce product images | "White-background smartwatch, blue lighting, premium" |
-| Posters and banners | "Tech conference poster, neon blue, minimal text" |
-| Icons and mascots | "A cyberpunk shrimp mascot, clean vector style" |
-| Illustrations and concept art | "Futuristic city skyline, purple-orange sunset" |
-| Rapid prototyping | "Three variations of a dark-mode SaaS landing page hero" |
-| AI workflow automation | Agent needs a header image for a generated report |
+| 文生图 | 输入中文/英文 prompt，输出 PNG 图片 |
+| 多模型切换 | `qwen-image-2.0` / `gpt-image-2-free` / `gemini-3-pro-image` |
+| 本地保存 | 图片自动存到 `outputs/images/` |
+| 环境变量安全 | API Key 从 `AIHUBMIX_API_KEY` 读取，不写死 |
+| 零依赖 | 只用 Python 标准库，不需要 pip install |
+| 跨平台 | Windows / macOS / Linux 都能用 |
 
-## Models
+---
 
-| Model | Best For |
+## Models · 模型选择
+
+| 模型 | 适用场景 |
 |---|---|
-| `qwen-image-2.0` | Chinese prompts, posters, e-commerce, illustrations |
-| `gpt-image-2-free` | General testing and free-model usage |
-| `gemini-3-pro-image` | High-quality images, complex scenes, semantic detail |
+| `qwen-image-2.0`（默认） | 中文 prompt、电商主图、海报、插画 |
+| `gpt-image-2-free` | 免费测试、通用生图 |
+| `gemini-3-pro-image` | 高质量复杂画面、强语义理解 |
 
-Default: `qwen-image-2.0`
-
-## Directory Structure
+指定模型的对话示例：
 
 ```
-aihubmix-image-gen-oss/
-├── SKILL.md
-├── README.md
-├── LICENSE
-└── scripts/
-    └── generate.py
+用 gemini-3-pro-image 生成一张赛博朋克城市夜景，霓虹蓝紫色调
 ```
 
-## Installation
-
-Copy this folder into your WorkBuddy skills directory.
-
-Common user-level path:
-
 ```
-~/.workbuddy/skills/aihubmix-image-gen-oss/
+Create a minimal icon of a robot shrimp, use model gpt-image-2-free
 ```
 
-On Windows:
+---
+
+## Use Cases · 使用场景
+
+### 电商素材
 
 ```
-C:\Users\<your-user-name>\.workbuddy\skills\aihubmix-image-gen-oss\
+生成一张智能手表电商主图，白色背景，蓝色渐变光效，高级感
 ```
 
-Restart WorkBuddy after installation if the skill does not appear immediately.
+### 海报 & Banner
 
-## Configure API Key
-
-This skill requires an Aihubmix API key. **Never put your key directly into source files.** Use the environment variable instead.
-
-### Windows PowerShell
-
-Temporary:
-
-```powershell
-$env:AIHUBMIX_API_KEY = "your-api-key-here"
+```
+Tech conference poster, dark background, neon blue geometric lines
 ```
 
-Permanent:
+### 图标 & Mascot
 
-```powershell
-[Environment]::SetEnvironmentVariable("AIHUBMIX_API_KEY", "your-api-key-here", "User")
+```
+一只赛博朋克风格的皮皮虾吉祥物，极简线框图标，蓝紫渐变
 ```
 
-Restart your terminal or WorkBuddy after a permanent change.
+### 插画 & 概念图
 
-Verify:
-
-```powershell
-echo $env:AIHUBMIX_API_KEY
+```
+Future city skyline at sunset, purple-orange gradient, cinematic lighting
 ```
 
-### macOS / Linux
+### 自动化报告配图
 
-Temporary:
+Agent 写完周报后，自动生成一张 AI 行业趋势封面图。
+
+---
+
+## Installation · 安装方式
+
+### 方式一：一句安装（推荐）
+
+在 WorkBuddy 中说：
+
+```
+帮我安装这个 skill：https://github.com/jany22259-arch/aihubmix-image-gen-oss
+```
+
+Agent 会自动 clone 到 `~/.workbuddy/skills/aihubmix-image-gen-oss/`。
+
+### 方式二：下载 .skill 包
+
+从 [GitHub Releases](https://github.com/jany22259-arch/aihubmix-image-gen-oss/releases) 下载最新的 `.skill` 文件，导入 WorkBuddy。
+
+### 方式三：手动安装
 
 ```bash
-export AIHUBMIX_API_KEY="your-api-key-here"
+# macOS / Linux
+git clone https://github.com/jany22259-arch/aihubmix-image-gen-oss.git ~/.workbuddy/skills/aihubmix-image-gen-oss
 ```
 
-Permanent: add the line above to `~/.bashrc` or `~/.zshrc`.
-
-Verify:
-
-```bash
-echo "$AIHUBMIX_API_KEY"
+```powershell
+# Windows
+git clone https://github.com/jany22259-arch/aihubmix-image-gen-oss.git $env:USERPROFILE\.workbuddy\skills\aihubmix-image-gen-oss
 ```
 
-## Usage
+---
 
-### CLI
+## Trigger Phrases · 触发方式
+
+在 WorkBuddy 中说下面任意一句都会触发这个 skill：
+
+| 触发语 | 示例 |
+|---|---|
+| 生成图片 / 生成一张图 | 生成一张蓝色科技风海报 |
+| 用 aihubmix 生成 | 用 aihubmix 生成一个猫咪图标 |
+| Create an image / Generate an image | Generate a cyberpunk poster |
+| 文生图 | 文生图：极简白底智能手表 |
+| 电商主图 / 海报 / 图标 / 插画 | 做一张电商主图，白色背景，蓝色光效 |
+| 指定模型生成 | 用 gemini-3-pro-image 生成一张城市夜景 |
+
+---
+
+## CLI Usage · 命令行使用
 
 ```bash
+# 基础用法
 python scripts/generate.py \
   --prompt "A futuristic blue technology poster" \
   --output-dir "./outputs/images" \
@@ -121,83 +194,79 @@ python scripts/generate.py \
   --n 1
 ```
 
-### Windows PowerShell One-Line
+**Windows PowerShell 一行版本**
 
 ```powershell
-python .\scripts\generate.py --prompt "A futuristic poster" --output-dir ".\outputs\images" --model "qwen-image-2.0" --size "1024x1024" --n 1
+python .\scripts\generate.py --prompt "赛博朋克城市夜景" --output-dir ".\outputs\images" --model "qwen-image-2.0"
 ```
 
-## Parameters
+### 参数
 
-| Parameter | Required | Default | Description |
+| 参数 | 必填 | 默认值 | 说明 |
 |---|---:|---|---|
-| `--prompt` | Yes | — | Text prompt for image generation |
-| `--output-dir` | Yes | — | Directory to save images |
-| `--model` | No | `qwen-image-2.0` | Model to use |
-| `--size` | No | `1024x1024` | Output image size |
-| `--n` | No | `1` | Number of images |
+| `--prompt` | 是 | — | 图片描述 prompt |
+| `--output-dir` | 是 | — | 图片保存目录 |
+| `--model` | 否 | `qwen-image-2.0` | 生图模型 |
+| `--size` | 否 | `1024x1024` | 图片尺寸 |
+| `--n` | 否 | `1` | 生成数量 |
 
-## Example Prompts
+---
 
-```
-A futuristic blue technology poster, clean background, premium product style
-```
+## Security · 安全
 
-```
-Chinese e-commerce hero image for a smartwatch, white background, blue gradient
-```
+- API Key 不放源码，不放 Git 提交，不放 README
+- Key 只从 `AIHUBMIX_API_KEY` 环境变量读取
+- 图片默认保存到当前工程目录，不写系统目录
+- 生成文件会加时间戳，不会覆盖已有文件
+- 公开仓库不含任何真实 Key 或个人路径
 
-```
-A cute robot shrimp mascot, cyberpunk neon blue, minimal icon style
-```
+---
 
-## Security Notes
+## Troubleshooting · 排障
 
-Do not put your API key into:
+| 错误 | 原因 | 解决 |
+|---|---|---|
+| `Missing AIHUBMIX_API_KEY` | 环境变量未设置 | 按上面的「配置」步骤设置，重启终端 |
+| `401 / 403` | Key 无效或过期 | 检查 Aihubmix 后台 Key 是否正确 |
+| `Unsupported model: xxx` | 模型名写错 | 用 `qwen-image-2.0` / `gpt-image-2-free` / `gemini-3-pro-image` |
+| PowerShell 换行报错 | 用了 `^` 而不是反引号 | 用一行命令，或用反引号 `` ` `` 换行 |
 
-- `SKILL.md`
-- `README.md`
-- `scripts/generate.py`
-- Git commits
-- Screenshots
+---
 
-Use the `AIHUBMIX_API_KEY` environment variable instead.
-
-## Troubleshooting
-
-### Missing API Key
+## Project Structure · 项目结构
 
 ```
-Error: Missing AIHUBMIX_API_KEY environment variable
+aihubmix-image-gen-oss/
+├── SKILL.md            # Agent 使用指引
+├── README.md           # 用户文档（本文件）
+├── LICENSE             # MIT 许可证
+├── .gitignore
+└── scripts/
+    └── generate.py     # 核心生成脚本（零依赖）
 ```
 
-**Fix:** Set the environment variable and restart your terminal.
+---
 
-### 401 / 403
+## Compatible Platforms · 兼容
 
-The API key may be invalid, expired, or missing permission.
+| 平台 | 状态 |
+|---|---|
+| WorkBuddy | ✅ 原生支持 |
+| Claude Code | ✅ 兼容 |
+| Codex | ✅ 兼容 |
+| OpenCode | ✅ 兼容 |
+| 其他支持 Agent Skills 标准的平台 | ✅ 理论兼容 |
 
-### Unsupported Model
+---
 
-```
-Error: Unsupported model: xxx. Supported: gemini-3-pro-image, gpt-image-2-free, qwen-image-2.0
-```
+## License · 许可证
 
-**Fix:** Use one of `qwen-image-2.0`, `gpt-image-2-free`, or `gemini-3-pro-image`.
+MIT — 随意使用、修改、分发。详见 [LICENSE](LICENSE)。
 
-### PowerShell Line Break Error
+---
 
-PowerShell uses backtick (`` ` ``), not `^`, for line continuation:
+## Star History · 关注项目
 
-```powershell
-python .\scripts\generate.py `
-  --prompt "A futuristic poster" `
-  --output-dir ".\outputs\images" `
-  --model "qwen-image-2.0"
-```
+如果这个 skill 对你有用，给个 ⭐ Star 就是对开源最大的支持。
 
-The one-line command is the safest approach if you are unsure.
-
-## License
-
-MIT — see [LICENSE](LICENSE).
+有问题或建议，欢迎提 [Issue](https://github.com/jany22259-arch/aihubmix-image-gen-oss/issues)。
