@@ -1,0 +1,21 @@
+# Environment variables (contains secrets)
+.env
+
+# Generated image output
+outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Package file (distributable)
+*.skill
