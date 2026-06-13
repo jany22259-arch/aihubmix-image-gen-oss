@@ -2,112 +2,73 @@
 name: 生图图
 displayName: 生图图
 description: >
-  Generate images through the Aihubmix image generation API and save them locally.
-  Supports qwen-image-2.0 and gpt-image-2.
-  Use this skill when the user asks for image generation, text-to-image,
-  posters, illustrations, e-commerce product images, icons, or visual concept art.
+  Generate images via Aihubmix API (qwen-image-2.0, gpt-image-2, gemini-3-pro-image)
+  and save output files to the workspace. qwen/gpt use /images/generations;
+  gemini uses /chat/completions multimodal route. Use when the user asks to create or generate images,
+  especially with keywords like Aihubmix, 生图, 文生图, qwen-image, gpt-image, gemini-image,
+  图片生成, 生成图片, 电商图, 海报, 插画, or any image-generation task.
 ---
 
-# Aihubmix Image Generation OSS Skill
+# Aihubmix Image Generation
 
-Generate images with Aihubmix-compatible image models and save the results as local files.
+Generate images through Aihubmix and save files locally. qwen/gpt models use `/v1/images/generations`; Gemini image model uses `/v1/chat/completions` with multimodal output.
 
 ## Supported Models
 
-| Model | Recommended Use |
+| Model | Best For |
 |---|---|
-| `qwen-image-2.0` | Chinese prompts, posters, e-commerce images, illustrations |
+| `qwen-image-2.0` | 中文提示词、电商图、海报、插画 |
 | `gpt-image-2` | Highest quality, precise editing, best face preservation. Slow (5min+), timeout >=10min. Rate limit (403) possible |
+| `gemini-3-pro-image` | Gemini multimodal image route. Supports aspect ratio via `--aspect-ratio`; uses `/chat/completions`, not `/images/generations` |
 
-Default model: `qwen-image-2.0`
+Default: `qwen-image-2.0`
 
-## Requirements
+## Security
 
-- Python 3.8+
-- A valid Aihubmix API key
-- Environment variable:
+- **Never hardcode API keys.** Read only from env var `AIHUBMIX_API_KEY`.
+- Never print or log the full API key.
+- Default output: `{workspace}/outputs/images/`
+- Never write files outside the workspace without explicit user approval.
+- Do NOT delete, move, or overwrite any existing user files.
+- If a target filename already exists, append a timestamp suffix.
 
-```bash
-AIHUBMIX_API_KEY
-```
+## Workflow
 
-Never hardcode the API key in any file.
+When the user requests image generation:
 
-## Basic Usage
+1. Confirm or infer the image prompt.
+2. Use `qwen-image-2.0` by default. Let the user override.
+3. Validate the model is in `{qwen-image-2.0, gpt-image-2, gemini-3-pro-image}`.
+4. Check `AIHUBMIX_API_KEY` env var. If missing, ask the user to set it.
+5. Run the generation script (`scripts/generate.py`).
+6. Save images to `{workspace}/outputs/images/`.
+7. Return the generated file paths. Attach viewable files when possible.
 
-Run:
+## CLI Usage
 
 ```bash
 python scripts/generate.py \
-  --prompt "A futuristic blue tech poster, clean composition, high detail" \
-  --output-dir "./outputs/images" \
+  --prompt "<prompt>" \
+  --output-dir "<workspace>/outputs/images" \
   --model "qwen-image-2.0" \
   --size "1024x1024" \
   --n 1
 ```
 
-Windows PowerShell:
-
-```powershell
-python .\scripts\generate.py --prompt "A futuristic blue tech poster, clean composition, high detail" --output-dir ".\outputs\images" --model "qwen-image-2.0" --size "1024x1024" --n 1
-```
-
-## Environment Variable Setup
-
-### macOS / Linux
-
-```bash
-export AIHUBMIX_API_KEY="your-api-key-here"
-```
-
-To make it permanent, add the line above to your shell profile, such as `~/.bashrc` or `~/.zshrc`.
-
-### Windows PowerShell
-
-Temporary:
-
-```powershell
-$env:AIHUBMIX_API_KEY = "your-api-key-here"
-```
-
-Permanent user-level setting:
-
-```powershell
-[Environment]::SetEnvironmentVariable("AIHUBMIX_API_KEY", "your-api-key-here", "User")
-```
-
-After setting it permanently, restart the terminal or the host application.
-
-## Workflow for Agents
-
-When using this skill:
-
-1. Extract the user's image prompt.
-2. Use `qwen-image-2.0` by default unless the user specifies a model.
-3. Validate the model is one of:
-   - `qwen-image-2.0`
-   - `gpt-image-2`
-4. Check that `AIHUBMIX_API_KEY` exists.
-5. Run `scripts/generate.py`.
-6. Save output to `{workspace}/outputs/images/` unless the user specifies another safe location.
-7. Return generated file paths to the user.
-8. If possible, present the generated image file directly.
-
-## Security Rules
-
-- Never hardcode API keys.
-- Never print the full API key.
-- Never commit `.env` files containing secrets.
-- Never write generated files outside the active workspace unless the user explicitly approves.
-- Do not delete, move, or overwrite user files.
-- If a filename already exists, generate a unique timestamped name.
+Parameters:
+- `--prompt` (required): Image description
+- `--output-dir` (required): Where to save generated files
+- `--model`: One of `qwen-image-2.0`, `gpt-image-2`, `gemini-3-pro-image`
+- `--size`: Image size for qwen/gpt image endpoint models, default `1024x1024`
+- `--n`: Number of images for qwen/gpt image endpoint models, default `1`
+- `--aspect-ratio`: Gemini aspect ratio, default `1:1`; supports `1:1`, `2:3`, `3:2`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, `21:9`
 
 ## Failure Handling
 
 | Error | Action |
 |---|---|
-| Missing `AIHUBMIX_API_KEY` | Ask the user to configure the environment variable |
-| 401 / 403 | Ask the user to verify API key and account permissions |
-| Unknown model | Show supported models and ask the user to choose again |
-| Empty response | Show a sanitized response summary |
-| Timeout | Retry once; stop and report if it fails again |
+| Missing `AIHUBMIX_API_KEY` | Ask user to configure environment variable |
+| 401 / 403 | Ask user to verify API key or account permissions |
+| Unknown model | List supported models; ask user to confirm |
+| Empty response data | Show sanitized API response summary |
+| Timeout | Retry once; stop on second failure |
