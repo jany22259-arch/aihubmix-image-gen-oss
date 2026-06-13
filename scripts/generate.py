@@ -6,7 +6,7 @@ https://aihubmix.com/v1/images/generations
 
 Supported models:
 - qwen-image-2.0
-- gpt-image-2-free
+- gpt-image-2
 - gemini-3-pro-image
 """
 
@@ -27,7 +27,7 @@ ENDPOINT = "/images/generations"
 
 SUPPORTED_MODELS = {
     "qwen-image-2.0",
-    "gpt-image-2-free",
+    "gpt-image-2",
     "gemini-3-pro-image",
 }
 

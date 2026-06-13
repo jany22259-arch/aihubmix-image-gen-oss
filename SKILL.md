@@ -2,7 +2,7 @@
 name: aihubmix-image-gen-oss
 description: >
   Generate images through the Aihubmix image generation API and save them locally.
-  Supports qwen-image-2.0, gpt-image-2-free, and gemini-3-pro-image.
+  Supports qwen-image-2.0, gpt-image-2, and gemini-3-pro-image.
   Use this skill when the user asks for image generation, text-to-image,
   posters, illustrations, e-commerce product images, icons, or visual concept art.
 ---
@@ -16,7 +16,7 @@ Generate images with Aihubmix-compatible image models and save the results as lo
 | Model | Recommended Use |
 |---|---|
 | `qwen-image-2.0` | Chinese prompts, posters, e-commerce images, illustrations |
-| `gpt-image-2-free` | General testing and free-model usage |
+| `gpt-image-2` | General testing and free-model usage |
 | `gemini-3-pro-image` | High-quality images, complex scenes, strong semantic understanding |
 
 Default model: `qwen-image-2.0`
@@ -86,7 +86,7 @@ When using this skill:
 2. Use `qwen-image-2.0` by default unless the user specifies a model.
 3. Validate the model is one of:
    - `qwen-image-2.0`
-   - `gpt-image-2-free`
+   - `gpt-image-2`
    - `gemini-3-pro-image`
 4. Check that `AIHUBMIX_API_KEY` exists.
 5. Run `scripts/generate.py`.
