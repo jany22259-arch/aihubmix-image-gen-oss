@@ -3,7 +3,7 @@ name: 生图图
 displayName: 生图图
 description: >
   Generate images through the Aihubmix image generation API and save them locally.
-  Supports qwen-image-2.0, gpt-image-2, and gemini-3-pro-image.
+  Supports qwen-image-2.0 and gpt-image-2.
   Use this skill when the user asks for image generation, text-to-image,
   posters, illustrations, e-commerce product images, icons, or visual concept art.
 ---
@@ -17,8 +17,7 @@ Generate images with Aihubmix-compatible image models and save the results as lo
 | Model | Recommended Use |
 |---|---|
 | `qwen-image-2.0` | Chinese prompts, posters, e-commerce images, illustrations |
-| `gpt-image-2` | Highest quality, precise editing, best face preservation. Slow (5min+), timeout ≥10min |
-| `gemini-3-pro-image` | High-quality images, complex scenes, strong semantic understanding |
+| `gpt-image-2` | Highest quality, precise editing, best face preservation. Slow (5min+), timeout >=10min. Rate limit (403) possible |
 
 Default model: `qwen-image-2.0`
 
@@ -88,7 +87,6 @@ When using this skill:
 3. Validate the model is one of:
    - `qwen-image-2.0`
    - `gpt-image-2`
-   - `gemini-3-pro-image`
 4. Check that `AIHUBMIX_API_KEY` exists.
 5. Run `scripts/generate.py`.
 6. Save output to `{workspace}/outputs/images/` unless the user specifies another safe location.

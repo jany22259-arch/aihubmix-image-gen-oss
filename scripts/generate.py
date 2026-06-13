@@ -7,7 +7,6 @@ https://aihubmix.com/v1/images/generations
 Supported models:
 - qwen-image-2.0
 - gpt-image-2
-- gemini-3-pro-image
 """
 
 from __future__ import annotations
@@ -28,7 +27,6 @@ ENDPOINT = "/images/generations"
 SUPPORTED_MODELS = {
     "qwen-image-2.0",
     "gpt-image-2",
-    "gemini-3-pro-image",
 }
 
 
