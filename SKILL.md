@@ -2,8 +2,8 @@
 name: 生图图
 displayName: 生图图
 description: >
-  Generate images via Aihubmix API (qwen-image-2.0, gpt-image-2, gemini-3-pro-image)
-  and save output files to the workspace. qwen/gpt use /images/generations;
+  Generate images via Aihubmix API (qwen-image-2.0, gpt-image-2, gemini-3-pro-image, wan2.7-image-pro, doubao-seedream-5.0-lite)
+  and save output files to the workspace. qwen/gpt/wan/doubao use /images/generations;
   gemini uses /chat/completions multimodal route. Use when the user asks to create or generate images,
   especially with keywords like Aihubmix, 生图, 文生图, qwen-image, gpt-image, gemini-image,
   图片生成, 生成图片, 电商图, 海报, 插画, or any image-generation task.
@@ -20,6 +20,8 @@ Generate images through Aihubmix and save files locally. qwen/gpt models use `/v
 | `qwen-image-2.0` | 中文提示词、电商图、海报、插画 |
 | `gpt-image-2` | Highest quality, precise editing, best face preservation. Slow (5min+), timeout >=10min. Rate limit (403) possible |
 | `gemini-3-pro-image` | Gemini multimodal image route. Supports aspect ratio via `--aspect-ratio`; uses `/chat/completions`, not `/images/generations` |
+| `wan2.7-image-pro` | Wan image generation model via `/images/generations`; use when user requests Wan/万相/通义系生图 |
+| `doubao-seedream-5.0-lite` | Doubao Seedream lightweight image model via `/images/generations`; use for fast/cost-effective image generation |
 
 Default: `qwen-image-2.0`
 
@@ -38,7 +40,7 @@ When the user requests image generation:
 
 1. Confirm or infer the image prompt.
 2. Use `qwen-image-2.0` by default. Let the user override.
-3. Validate the model is in `{qwen-image-2.0, gpt-image-2, gemini-3-pro-image}`.
+3. Validate the model is in `{qwen-image-2.0, gpt-image-2, gemini-3-pro-image, wan2.7-image-pro, doubao-seedream-5.0-lite}`.
 4. Check `AIHUBMIX_API_KEY` env var. If missing, ask the user to set it.
 5. Run the generation script (`scripts/generate.py`).
 6. Save images to `{workspace}/outputs/images/`.
@@ -58,7 +60,7 @@ python scripts/generate.py \
 Parameters:
 - `--prompt` (required): Image description
 - `--output-dir` (required): Where to save generated files
-- `--model`: One of `qwen-image-2.0`, `gpt-image-2`, `gemini-3-pro-image`
+- `--model`: One of `qwen-image-2.0`, `gpt-image-2`, `gemini-3-pro-image`, `wan2.7-image-pro`, `doubao-seedream-5.0-lite`
 - `--size`: Image size for qwen/gpt image endpoint models, default `1024x1024`
 - `--n`: Number of images for qwen/gpt image endpoint models, default `1`
 - `--aspect-ratio`: Gemini aspect ratio, default `1:1`; supports `1:1`, `2:3`, `3:2`, `3:4`, `4:3`, `4:5`, `5:4`, `9:16`, `16:9`, `21:9`

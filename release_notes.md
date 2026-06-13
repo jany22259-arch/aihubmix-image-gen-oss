@@ -1,25 +1,31 @@
-## v1.0.4
+## v1.0.5
 
-### Gemini route restored
+### New Models
 
-Gemini is not compatible with `/v1/images/generations` on Aihubmix. It must use `/v1/chat/completions` with multimodal output:
+Added two image-generation models via `/v1/images/generations`:
 
-- `qwen-image-2.0` → `/v1/images/generations`
-- `gpt-image-2` → `/v1/images/generations`
-- `gemini-3-pro-image` → `/v1/chat/completions` + `modalities=["text", "image"]`
+- `wan2.7-image-pro`
+- `doubao-seedream-5.0-lite`
 
-### Changes
+### Current routing
 
-- Restored `gemini-3-pro-image` support.
-- Added dual routing in `scripts/generate.py`.
-- Added `--aspect-ratio` for Gemini route.
-- Added parser for Gemini `inline_data` / multimodal response.
-- Kept gpt-image-2 premium/slow/rate-limit notes.
+| Model | Route |
+|---|---|
+| `qwen-image-2.0` | `/v1/images/generations` |
+| `gpt-image-2` | `/v1/images/generations` |
+| `wan2.7-image-pro` | `/v1/images/generations` |
+| `doubao-seedream-5.0-lite` | `/v1/images/generations` |
+| `gemini-3-pro-image` | `/v1/chat/completions` multimodal route |
+
+### Notes
+
+- `wan2.7-image-pro` and `doubao-seedream-5.0-lite` are treated as standard image endpoint models.
+- Gemini remains on the chat multimodal route because Aihubmix does not accept Gemini through `/images/generations`.
 
 ### Install
 
 ```
-Help me install this skill: https://github.com/jany22259-arch/aihubmix-image-gen-oss
+Help me install this skill: https://github.com/pipixia-run/aihubmix-image-gen-oss
 ```
 
 Or download `shengtu.skill` below.

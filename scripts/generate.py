@@ -2,7 +2,7 @@
 Aihubmix Image Generation — save generated images locally.
 
 Routes:
-- qwen-image-2.0 / gpt-image-2: /v1/images/generations
+- qwen-image-2.0 / gpt-image-2 / wan2.7-image-pro / doubao-seedream-5.0-lite: /v1/images/generations
 - gemini-3-pro-image: /v1/chat/completions with multimodal output
 
 Reads AIHUBMIX_API_KEY from environment.
@@ -28,6 +28,8 @@ CHAT_ENDPOINT = "/chat/completions"
 IMAGE_ENDPOINT_MODELS = {
     "qwen-image-2.0",
     "gpt-image-2",
+    "wan2.7-image-pro",
+    "doubao-seedream-5.0-lite",
 }
 
 CHAT_IMAGE_MODELS = {
